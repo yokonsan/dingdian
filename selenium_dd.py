@@ -1,3 +1,4 @@
+#导入需要的模块
 from selenium import webdriver
 from bs4 import BeautifulSoup
 from selenium.webdriver.common.keys import Keys
@@ -8,28 +9,46 @@ import re
 import os
 
 
+#爬虫类
 class Dingdian(object):
 
     def __init__(self,search_name):
+        '''
+        search_name是用户要输入的小说名，PhantomJS是一个没有界面的浏览器，
+        selenuim也支持他的驱动，使用PhanJS是因为效率高。PhantomJS用来渲染解析JS，
+        Selenium用来驱动并与Python的对接，Python 进行后期的处理工作。
+        '''
         self.search_name = search_name
         self.driver = webdriver.PhantomJS()
 
     def search_book(self,search_name):
+        #自动打开浏览器访问页面
         self.driver.get('http://www.23us.com/')
+        #断言
         assert "顶点" in self.driver.title
         print('正在搜索请稍等...')
+        #找到输入框的name属性
         elem = self.driver.find_element_by_name('q')
+        #像输入框输入搜索的小说名
         elem.send_keys(self.search_name)
+        #相当于浏览器点击了回车
         elem.send_keys(Keys.RETURN)
+        #切换到新打开的页面
         self.driver.switch_to_window(self.driver.window_handles[1])
+        #获取新页面的源码
         info = self.driver.page_source
         self.get_search_url(info)
 
     def get_search_url(self,info):
+        '''
+        使用正则从源码中匹配到搜索第一页的小说和链接，
+        只获取第一页，如果有搜索的小说，那肯定会在第一页。
+        '''
         p = r'<a cpos="title" href="(.*?)" title="(.*?)"'
         result = re.findall(p, info)
         if result:
             for i in result:
+                #打印出搜索小说名对应的url
                 if self.search_name in i:
                     print(i[0])
                     self.get_all_url(i[0])
@@ -39,16 +58,19 @@ class Dingdian(object):
             print('正则匹配出错了。')
 
     def get_all_url(self,url):
+        #定义一个存储章节url的集合
         list = []
+        #BeautifulSoup解析页面获取所有章节url
         soup = BeautifulSoup(self.get_html(url), 'lxml')
         all_td = soup.find_all('td', class_="L")
         for a in all_td:
+            #这里有些小说会有作者写的一些通知，页面会和普通章节页不同，直接过滤报错
             try:
                 html = a.find('a').get('href')
                 htmls = url + html
                 list.append(htmls)
             except:
-                print('pass')
+                pass
         print(list)
         self.download_book(list)
 
@@ -70,6 +92,7 @@ class Dingdian(object):
             except:
                 print('re faild: %s' % title)
 
+            #获取页面的response然后返回
     def get_html(self,url):
         headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0.2883.87 Safari/537.36'}
         html = requests.get(url,headers=headers).content
@@ -79,11 +102,15 @@ class Dingdian(object):
 
 if __name__ == '__main__':
     start = time.time()
-    os.mkdir('dingdian2')
-    os.chdir('dingdian2')
+    #转移工作路径
+    os.mkdir('dingdian')
+    os.chdir('dingdian')
+    #进程池
     p = Pool(4)
+    #用户输入下载的小说名
     search_name = input('请输入要下载的小说名（注意错别字哦）：')
+    #实例化爬虫
     test = Dingdian(search_name)
     p.apply_async(test.search_book(search_name))
-    # test.search_book(search_name)
+    #打印下载的时间
     print(int(time.time() - start))
