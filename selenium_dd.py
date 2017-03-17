@@ -79,7 +79,7 @@ class Dingdian(object):
         # self.download_book(list)
 
     def download_book(self,search_name):
-        for each in set(self.get_all_url(search_name)):
+        for each in self.get_all_url(search_name):
             soup = BeautifulSoup(self.get_html(each), 'lxml')
             # 获取章节标题
             title = soup.title.text.split('-')[1]
