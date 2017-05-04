@@ -14,3 +14,7 @@ selenium+PhantomJS+python下载小说
 	</ul>
 <br>
 未来会继续改进。
+<br><br>
+<a href="https://github.com/Blackyukun/dingdian/tree/second">第一次更新</a>
+<br>
+继续更新。
