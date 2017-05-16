@@ -15,7 +15,7 @@
 ```
 (venv) $ pip install -r requirements.txt
 ```
-<br>
+
 ‘À––≥Ã–Ú(windows)£∫<br>
 ```
 (venv) $ python manage.py runserver --host 0.0.0.0
