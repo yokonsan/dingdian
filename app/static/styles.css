@@ -1,0 +1,6 @@
+.page li{
+    list-style: none;
+	float:left;
+	padding: 0 150px;
+	line-height: 39px;
+}

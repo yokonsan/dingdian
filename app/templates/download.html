@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+
+{% block title %}Download{% endblock %}
+
+{% block page_content %}
+<div class="page-header">
+    <h4>{% if book %}{{ book }}{% else %}无小说{% endif %}正在下载</h4>
+</div>
+
+{% endblock %}
