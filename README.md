@@ -20,7 +20,7 @@
 ```
 (venv) $ python manage.py runserver --host 0.0.0.0
 ```
-<br>
+
 爬虫
 ----
 <ul>
@@ -31,6 +31,7 @@
 		需要配置 mangodb 数据库，存储爬取内容，作为缓存，否则每次搜索抓取一次太慢
 	</li>
 </ul>
+
 Flask实现
 ----
 利用集成的Flask包 Flask_Bootstrap作为基模版渲染前端界面，利用 gevent 实现Flask异步非阻塞处理请求。
