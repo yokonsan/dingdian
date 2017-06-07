@@ -1,6 +1,8 @@
 # Python爬虫 + Flask 实现小说网站
 介绍
 ----
+只是一个练手项目，无实际意义。
+
 使用Python的selenium+PhantomJS实现爬虫，负责爬取顶点小说网的小说。使用flask_bootstrap简单实现页面。
 小说搜索界面如下：<br>
 <img src="https://github.com/Blackyukun/dingdian/blob/last/assets/img/peitu1.jpg" name="peitu1"><br>
@@ -35,6 +37,7 @@
 Flask实现
 ----
 利用集成的Flask包 Flask_Bootstrap作为基模版渲染前端界面，利用 gevent 实现Flask异步非阻塞处理请求。
-操作的时候舒服一些。
+
+如果运行出错，大多是顶点网站更新，爬虫无效，可以自己更改爬虫。不在继续更新。
 <br><br>
 <h3>End!</h3>
