@@ -23,11 +23,3 @@ def contents_number(list):
         data[i] = e
     # print(data)
     return data
-
-# search_name = '诛仙'
-#
-# list = get_allzj_title(search_name)
-# # print(list)
-# contents_number(list)
-#
-# book_number(search_name)
