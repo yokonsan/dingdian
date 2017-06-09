@@ -57,9 +57,3 @@ def get_author(search_name):
     # print(L)
     return L
 
-#
-# search_name = "九鼎记"
-# # get_allzj_title(search_name)
-# # get_allbook_url(search_name)
-# # get_allzj_title(search_name)
-# get_author(search_name)
