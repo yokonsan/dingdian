@@ -26,8 +26,6 @@ def search_name_html(search_name):
     driver.switch_to.window(driver.window_handles[1])
     # 获取新页面的源码
     info = driver.page_source
-    # print('以获取信息...')
-    # print(info)
     return info
 
 
