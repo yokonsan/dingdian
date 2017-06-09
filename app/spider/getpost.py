@@ -45,16 +45,3 @@ def get_posts(search_name, id, num):
         pass
     # print(Post)
     return Post
-
-# search_name = '诛仙'
-#
-# dict = book_number(search_name)
-# ids =[k for k, v in dict.items()]
-# id = ids[0]
-#
-# list = get_contents_url(search_name)
-# data = contents_number(list)
-# nums = [i for i, e in data.items()]
-# num = nums[0]
-
-# get_posts('诛仙', 0, 0)
