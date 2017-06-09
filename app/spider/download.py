@@ -1,14 +1,10 @@
-# from .getcontens import get_allzj_title
 from .getpost import get_posts
-# from .booknums import contents_number
 import os
 
 
 
 
 def download(book, data):
-    # titles = get_allzj_title('诛仙')[0]
-    # data = contents_number(titles)
     os.mkdir(book)
     os.chdir(book)
     for k, v in data.items():
