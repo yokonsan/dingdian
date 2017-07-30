@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block title %}
+搜索结果
+{% endblock %}
+
+{% block content %}
+<h4>搜索结果</h4><hr>
+{% for i in books %}
+<ul>
+    <li>
+        <table>
+            <tr>
+                <td>
+                    <img class="img" src="{{i.book_img}}">
+                </td>
+                <td>
+                    <a href="{{url_for('main.chapter',book_id=i.id)}}">{{i.book_name}}</a>
+                    <p>{{i.profile}}</p>
+                    <p>{{i.author}}</p>
+                    <p>{{i.style}}</p>
+                    <p>{{i.last_update}}</p>
+                </td>
+            </tr>
+        </table><hr>
+    </li>
+</ul>
+{% endfor %}
+{% endblock %}

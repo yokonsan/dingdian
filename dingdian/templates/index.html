@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block title %}
+首页
+{% endblock %}
+
+{% block content %}
+<form action="" method="post" name="search">
+{{form.hidden_tag()}}
+{{form.search_name(size=80)}}<br>
+{% for error in form.search_name.errors %}
+    <span style="color: red;">[{{error}}]</span>
+{% endfor %}<br>
+{{form.submit}}
+</form>
+{% endblock %}

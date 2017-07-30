@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block title %}
+小说章节
+{% endblock %}
+
+{% block content %}
+<h4>所有章节</h4><hr>
+{% for i in chapters %}
+<ul>
+    <li>
+        <a href="{{url_for('main.content',chapter_id=i.id)}}">{{i.chapter}}</a>
+    </li>
+</ul>
+{% endfor %}
+{% endblock %}

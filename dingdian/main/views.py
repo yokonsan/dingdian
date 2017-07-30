@@ -59,13 +59,14 @@ def chapter(book_id):
 
 @main.route('/content/<int:chapter_id>')
 def content(chapter_id):
+    # 这里有出bug，记得改
     article = Article.query.filter_by(chapter_id=chapter_id)
     if article:
         return render_template('article.html', article=article)
     spider = DdSpider()
 
-    content = Article.query.filter_by(id=chapter_id).first()
-    article = Article(content=spider.get_article(content.chapter_url),
+    chapter = Chapter.query.filter_by(id=chapter_id).first()
+    article2 = Article(content=spider.get_article(chapter.chapter_url),
                       chapter_id=chapter_id)
-    db.session.add(article)
-    return render_template('article.html', article=article)
+    db.session.add(article2)
+    return render_template('article.html', article=article2)
