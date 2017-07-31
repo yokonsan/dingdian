@@ -1,0 +1,28 @@
+body{
+    background-color: #f2f2f2;
+}
+.col-md-8{
+    margin-top: 15px;
+}
+img{
+    width: 150px;
+    height: 200px;
+    margin-right: 18px;
+}
+.art{
+    font-size: 16px;
+}
+.btn-group{
+    float: right;
+    margin-bottom: 20px;
+}
+/*floatButton*/
+.floatButton {
+    position: fixed;
+    top: 50%;
+    right: 0;
+    z-index: 9999999;
+}
+.letter{
+    margin: 100px;
+}
