@@ -8,7 +8,7 @@
 <h3 align="center">搜索</h3><hr>
 <form action="" method="post" name="search">
 {{form.hidden_tag()}}
-{{form.search_name(class="form-control",placeholder="搜索")}}
+{{form.search_name(class="form-control",placeholder="输入你要搜索的书名")}}
 {% for error in form.search_name.errors %}
     <span style="color: red;">[{{error}}]</span>
 {% endfor %}<br>
