@@ -1,4 +1,4 @@
-from flask import flash, render_template, url_for, redirect
+from flask import flash, render_template, url_for, redirect, request, current_app
 from flask.blueprints import Blueprint
 
 from dingdian import db
@@ -26,7 +26,8 @@ def result(search):
     # 查找数据库中search键相等的结果，如果有则不需要调用爬虫，直接返回
     books = Novel.query.filter_by(search_name=search).all()
     if books:
-        return render_template('result.html', books=books)
+        return render_template('result.html', search=search, books=books)
+
     spider = DdSpider()
     for data in spider.get_index_result(search):
         novel = Novel(book_name=data['title'],
@@ -39,34 +40,81 @@ def result(search):
                       search_name=search)
         db.session.add(novel)
     books = Novel.query.filter_by(search_name=search).all()
-    return render_template('result.html', books=books)
+    return render_template('result.html', search=search, books=books)
 
 @main.route('/chapter/<int:book_id>')
 def chapter(book_id):
-    chapters = Chapter.query.filter_by(book_id=book_id).all()
-    if chapters:
-        return render_template('chapter.html', chapters=chapters)
-    spider = DdSpider()
+    page = request.args.get('page', 1, type=int)
+    all_chapter = Chapter.query.filter_by(book_id=book_id).first()
+    # print(type(pagination))
+    if all_chapter:
+        pagination = Chapter.query.filter_by(book_id=book_id).paginate(
+                page, per_page=current_app.config['CHAPTER_PER_PAGE'],
+                error_out=False
+        )
+        chapters = pagination.items
+        book = Novel.query.filter_by(id=book_id).first()
+        return render_template('chapter.html', book=book, chapters=chapters, pagination=pagination)
 
+    spider = DdSpider()
     book = Novel.query.filter_by(id=book_id).first()
     for data in spider.get_chapter(book.book_url):
         chapter = Chapter(chapter=data['chapter'],
                            chapter_url=data['url'],
                            book_id=book_id)
         db.session.add(chapter)
-    chapters = Chapter.query.filter_by(book_id=book_id).all()
-    return render_template('chapter.html', chapters=chapters)
+    pagination2 = Chapter.query.filter_by(book_id=book_id).paginate(
+        page, per_page=current_app.config['CHAPTER_PER_PAGE'],
+        error_out=False
+    )
+    chapters = pagination2.items
+
+    return render_template('chapter.html', book=book, chapters=chapters, pagination=pagination2)
 
 @main.route('/content/<int:chapter_id>')
 def content(chapter_id):
-    # 这里有出bug，记得改
-    article = Article.query.filter_by(chapter_id=chapter_id)
+    book_id = Chapter.query.filter_by(id=chapter_id).first().book_id
+    article = Article.query.filter_by(chapter_id=chapter_id).first()
     if article:
-        return render_template('article.html', article=article)
-    spider = DdSpider()
+        chapter = Chapter.query.filter_by(id=chapter_id).first()
+        return render_template('article.html', chapter=chapter, article=article, book_id=book_id)
 
+    spider = DdSpider()
     chapter = Chapter.query.filter_by(id=chapter_id).first()
     article2 = Article(content=spider.get_article(chapter.chapter_url),
                       chapter_id=chapter_id)
     db.session.add(article2)
-    return render_template('article.html', article=article2)
+    return render_template('article.html', chapter=chapter, article=article2, book_id=book_id)
+
+# 下一章
+@main.route('/next/<int:chapter_id>')
+def next(chapter_id):
+    chapter = Chapter.query.filter_by(id=chapter_id).first()
+    book = Novel.query.filter_by(id=chapter.book_id).first()
+    # print(type(all_chapters))
+    all_chapters = [i for i in book.chapters]
+    # all_chapters是一个集合,通过操作数组很容易拿到下一章内容
+    if all_chapters[-1] != chapter:
+        next_chapter = all_chapters[all_chapters.index(chapter)+1]
+        return redirect(url_for('main.content', chapter_id=next_chapter.id))
+    else:
+        flash('已是最后一章了。')
+        return redirect(url_for('main.content', chapter_id=chapter_id))
+
+
+
+# 上一章
+@main.route('/prev/<int:chapter_id>')
+def prev(chapter_id):
+    chapter = Chapter.query.filter_by(id=chapter_id).first()
+    book = Novel.query.filter_by(id=chapter.book_id).first()
+    all_chapters = [i for i in book.chapters]
+    if all_chapters[0] != chapter:
+        prev_chapter = all_chapters[all_chapters.index(chapter)-1]
+        return redirect(url_for('main.content', chapter_id=prev_chapter.id))
+    else:
+        flash('没有上一章了哦。')
+        return redirect(url_for('main.content', chapter_id=chapter_id))
+
+
+

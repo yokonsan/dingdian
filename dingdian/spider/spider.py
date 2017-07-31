@@ -66,10 +66,10 @@ class DdSpider(object):
     def get_article(self, url):
         resp = self.parse_url(url)
         p = re.compile(r'<div id="content">(.*?)</div>', re.S)
-        article = re.findall(p, resp)[0]
-        # 文章中的'<br/>'标签先不去除，后面有用
-        return article.strip().replace('&nbsp;', '')
-#
+        article = re.findall(p, resp)
+        # 文章中的'<br/>'标签先不去除，后面在模版中使用
+        return article[0].strip()
+
 # dd = DdSpider()
 # print(dd.get_article('http://www.23us.cc/html/158/158120/8275025.html'))
 
