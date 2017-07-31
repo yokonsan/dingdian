@@ -5,10 +5,10 @@
 {% endblock %}
 
 {% block content %}
-<h4>搜索结果</h4><hr>
+<h3 align="center">{{search}}的搜索结果</h3><hr>
 {% for i in books %}
-<ul>
-    <li>
+<ul class="list-group">
+    <li class="list-group-item">
         <table>
             <tr>
                 <td>
@@ -16,13 +16,13 @@
                 </td>
                 <td>
                     <a href="{{url_for('main.chapter',book_id=i.id)}}">{{i.book_name}}</a>
-                    <p>{{i.profile}}</p>
-                    <p>{{i.author}}</p>
-                    <p>{{i.style}}</p>
-                    <p>{{i.last_update}}</p>
+                    <p><b>简介：</b>{{i.profile | safe}}</p>
+                    <p><b>作者：</b>{{i.author}}</p>
+                    <p><b>类型：</b>{{i.style}}</p>
+                    <p><b>更新时间：</b>{{i.last_update}}</p>
                 </td>
             </tr>
-        </table><hr>
+        </table>
     </li>
 </ul>
 {% endfor %}

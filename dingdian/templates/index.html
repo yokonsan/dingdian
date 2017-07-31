@@ -5,12 +5,13 @@
 {% endblock %}
 
 {% block content %}
+<h3 align="center">搜索</h3><hr>
 <form action="" method="post" name="search">
 {{form.hidden_tag()}}
-{{form.search_name(size=80)}}<br>
+{{form.search_name(class="form-control",placeholder="搜索")}}
 {% for error in form.search_name.errors %}
     <span style="color: red;">[{{error}}]</span>
 {% endfor %}<br>
-{{form.submit}}
+{{form.submit(value="搜索",class="btn btn-default")}}
 </form>
 {% endblock %}
