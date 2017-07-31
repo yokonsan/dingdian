@@ -31,7 +31,7 @@ def deploy():
     # for a in articles:
     #     db.session.delete(a)
 
-    db.session.commit()
+    # db.session.commit()
 
     # 更新数据库
     upgrade()
