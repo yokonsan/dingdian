@@ -1,0 +1,9 @@
+Flask==0.11.1
+Flask-Migrate==2.0.3
+Flask-Script==2.0.5
+Flask-SQLAlchemy==2.2
+Flask-WTF==0.14.2
+Jinja2==2.8
+requests==2.14.2
+SQLAlchemy==1.0.13
+WTForms==2.1
