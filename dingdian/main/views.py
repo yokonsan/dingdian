@@ -37,8 +37,7 @@ def index():
 @main.route('/results/<search>')
 def result(search):
     # 查找数据库中search键相等的结果，如果有则不需要调用爬虫，直接返回
-    search_id = Search.query.filter_by(search_name=search).first().id
-    books = Novel.query.filter_by(search_name=search_id).all()
+    books = Novel.query.filter_by(search_name=search).all()
     if books:
         return render_template('result.html', search=search, books=books)
 

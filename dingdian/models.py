@@ -8,7 +8,8 @@ class Search(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     search_name = db.Column(db.String(64), index=True)
 
-    novels = db.relationship('Novel', backref='search', lazy='dynamic')
+    novels = db.relationship('Novel', backref='search', lazy='joined',
+                             primaryjoin="Novel.search_name == Search.search_name")
 
 
 class Novel(db.Model):
@@ -23,7 +24,7 @@ class Novel(db.Model):
     profile = db.Column(db.Text, nullable=True)
 
     chapters = db.relationship('Chapter', backref='book', lazy='dynamic')
-    search_name = db.Column(db.String, db.ForeignKey('searches.id'))
+    search_name = db.Column(db.String, db.ForeignKey('searches.search_name'))
 
     def to_json(self):
         json_novel = {
