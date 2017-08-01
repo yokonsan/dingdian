@@ -6,5 +6,19 @@
 
 {% block content %}
 <h3>服务器内容出现错误。。。</h3><hr>
-<h4>已通知管理员抢修</h4>
+<h4>已通知管理员抢修</h4><hr>
+<h4>或许你也可以
+<button id="refresh" class="btn btn-default btn-sm" type="button">
+    <span class="glyphicon glyphicon-refresh"></span> 刷新
+</button>一下试试</h4>
+{% endblock %}
+{% block script %}
+{{ super() }}
+<script>
+$(function(){
+    $('#refresh').click(function(){
+        window.location.reload();
+    });
+});
+</script>
 {% endblock %}

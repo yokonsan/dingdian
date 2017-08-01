@@ -43,6 +43,7 @@
             <span class="glyphicon glyphicon-arrow-down"></span>
         </button>
     </div>
+    {% block script %}
     <script src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
 <script>
     $(function(){
@@ -54,5 +55,6 @@
         });
     });
 </script>
+{% endblock %}
 </body>
 </html>
