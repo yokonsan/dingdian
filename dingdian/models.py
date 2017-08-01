@@ -8,7 +8,7 @@ class Search(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     search_name = db.Column(db.String(64), index=True)
 
-    novels = db.relationship('Novel', backref='search', lazy='joined')
+    novels = db.relationship('Novel', backref='search', lazy='dynamic')
 
 
 class Novel(db.Model):

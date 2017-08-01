@@ -21,21 +21,15 @@ class DevelopmentConfig(Config):
                               'sqlite:///' + os.path.join(basedir, 'data-dev.sqlite')
     DEBUG = True
 
-class ProductionConfig(Config):
+class HerokuConfig(Config):
     SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or \
-        'sqlite:///' + os.path.join(basedir, 'data.sqlite')
-
-    @classmethod
-    def init_app(cls, app):
-        Config.init_app(app)
-
-class HerokuConfig(ProductionConfig):
+                              'sqlite:///' + os.path.join(basedir, 'data.sqlite')
 
     SSL_DISABLE = bool(os.environ.get('SSL_DISABLE'))
 
     @classmethod
     def init_app(cls, app):
-        ProductionConfig.init_app(app)
+        Config.init_app(app)
 
         # 处理代理服务器首部
         from werkzeug.contrib.fixers import ProxyFix
@@ -43,7 +37,6 @@ class HerokuConfig(ProductionConfig):
 
 config = {
     'development': DevelopmentConfig,
-    'production': ProductionConfig,
     'heroku': HerokuConfig,
     'default': DevelopmentConfig
 }
