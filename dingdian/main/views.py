@@ -4,7 +4,7 @@ from flask.blueprints import Blueprint
 from dingdian import db
 from .forms import SearchForm
 from ..spider.spider import DdSpider
-from ..models import Search, Novel, Chapter, Article
+from ..models import Novel, Chapter, Article
 
 
 main = Blueprint('main', __name__)
@@ -28,8 +28,6 @@ def index():
     form = SearchForm()
     if form.validate_on_submit():
         search = form.search_name.data
-        data = Search(search_name=search)
-        db.session.add(data)
         flash('搜索成功。')
         return redirect(url_for('main.result', search=search))
     return render_template('index.html', form=form)

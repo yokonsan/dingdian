@@ -3,15 +3,6 @@ from flask import url_for
 from dingdian import db
 
 
-class Search(db.Model):
-    __tablename__ = 'searches'
-    id = db.Column(db.Integer, primary_key=True)
-    search_name = db.Column(db.String(64), index=True)
-
-    novels = db.relationship('Novel', backref='search', lazy='joined',
-                             primaryjoin="Novel.search_name == Search.search_name")
-
-
 class Novel(db.Model):
     __tablename__ = 'novels'
     id = db.Column(db.Integer, primary_key=True)
@@ -22,9 +13,9 @@ class Novel(db.Model):
     style = db.Column(db.String(64), nullable=True)
     last_update = db.Column(db.String(64), nullable=True)
     profile = db.Column(db.Text, nullable=True)
+    search_name = db.Column(db.String)
 
     chapters = db.relationship('Chapter', backref='book', lazy='dynamic')
-    search_name = db.Column(db.String, db.ForeignKey('searches.search_name'))
 
     def to_json(self):
         json_novel = {
