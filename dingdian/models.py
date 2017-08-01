@@ -1,3 +1,5 @@
+from flask import url_for
+
 from dingdian import db
 
 
@@ -23,6 +25,23 @@ class Novel(db.Model):
     chapters = db.relationship('Chapter', backref='book', lazy='dynamic')
     search_name = db.Column(db.String, db.ForeignKey('searches.search_name'))
 
+    def to_json(self):
+        json_novel = {
+            'url': url_for('api.get_result', search=self.search_name,_external=True),
+            'book_name': self.book_name,
+            'book_url': self.book_url,
+            'book_img': self.book_img,
+            'author': self.author,
+            'style': self.style,
+            'last_update': self.last_update,
+            'profile': self.profile,
+            'chapters': url_for('api.get_chapter', id=self.id, _external=True)
+        }
+        return json_novel
+
+    def __repr__(self):
+        return '<Novel %r>' % self.book_name
+
 
 class Chapter(db.Model):
     __tablename__ = 'chapters'
@@ -33,6 +52,18 @@ class Chapter(db.Model):
     article = db.relationship('Article', backref='chapter', lazy='dynamic')
     book_id = db.Column(db.Integer, db.ForeignKey('novels.id'))
 
+    def to_json(self):
+        json_chapter = {
+            'url': url_for('api.get_chapter', id=self.book_id, _external=True),
+            'chapter_name': self.chapter,
+            'chapter_url': self.chapter_url,
+            'content': url_for('api.get_content', id=self.id, _external=True)
+        }
+
+        return json_chapter
+
+    def __repr__(self):
+        return '<Post %r>' % self.chapter
 
 class Article(db.Model):
     __tablename__ = 'articles'
@@ -40,4 +71,12 @@ class Article(db.Model):
     content = db.Column(db.Text)
 
     chapter_id = db.Column(db.Integer, db.ForeignKey('chapters.id'))
+
+    def to_json(self):
+        json_article = {
+            'url': url_for('api.get_content', id=self.chapter_id, _external=True),
+            'content': self.content
+        }
+
+        return json_article
 

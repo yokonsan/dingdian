@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block title %}
+404
+{% endblock %}
+
+{% block content %}
+<h3>来到书中未知的世界。。。</h3><hr>
+<div>
+    <a href="{{url_for('main.index')}}">
+    <button type="button" class="btn btn-default btn-sm">
+      <span class="glyphicon glyphicon-search"></span> 返回搜索
+    </button>
+    </a>
+</div>
+{% endblock %}

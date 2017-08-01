@@ -1,4 +1,4 @@
-from flask import flash, render_template, url_for, redirect, request, current_app
+from flask import flash, render_template, url_for, redirect, request, current_app, jsonify
 from flask.blueprints import Blueprint
 
 from dingdian import db
@@ -8,6 +8,19 @@ from ..models import Search, Novel, Chapter, Article
 
 
 main = Blueprint('main', __name__)
+
+@main.errorhandler(404)
+def page_not_found(error):
+    if request.accept_mimetypes.accept_json and \
+            not request.accept_mimetypes.accept_html:
+        response = jsonify({'error': 'not found'})
+        response.status_code = 404
+        return response
+    return render_template('404.html'), 404
+
+@main.errorhandler(500)
+def internal_server_error(error):
+    return render_template('500.html'), 500
 
 @main.route('/', methods=['GET', 'POST'])
 @main.route('/index', methods=['GET', 'POST'])
