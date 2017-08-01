@@ -23,7 +23,7 @@ class Novel(db.Model):
     profile = db.Column(db.Text, nullable=True)
 
     chapters = db.relationship('Chapter', backref='book', lazy='dynamic')
-    search_name = db.Column(db.String, db.ForeignKey('searches.search_name'))
+    search_name = db.Column(db.String, db.ForeignKey('searches.id'))
 
     def to_json(self):
         json_novel = {
