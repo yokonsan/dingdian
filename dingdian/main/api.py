@@ -5,7 +5,7 @@ from ..models import *
 
 api = Blueprint('api', __name__)
 
-@api.route('/results/search')
+@api.route('/results/<search>')
 def get_result(search):
     results = Novel.query.filter_by(search_name=search).all()
     return jsonify({
@@ -23,10 +23,10 @@ def get_chapter(book_id):
     chapters = pagination.items
     prev = None
     if pagination.has_prev:
-        prev = url_for('api.get_chapter', page=page-1, _external=True)
+        prev = url_for('api.get_chapter', book_id=book_id, page=page-1, _external=True)
     next = None
     if pagination.has_next:
-        next = url_for('api.get_chapter', page=page+1, _external=True)
+        next = url_for('api.get_chapter', book_id=book_id, page=page+1, _external=True)
 
     return jsonify({
         'chapters': [chapter.to_json() for chapter in chapters],

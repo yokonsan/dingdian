@@ -35,7 +35,6 @@ class Novel(db.Model):
             'style': self.style,
             'last_update': self.last_update,
             'profile': self.profile,
-            'chapters': url_for('api.get_chapter', id=self.id, _external=True)
         }
         return json_novel
 
@@ -54,10 +53,9 @@ class Chapter(db.Model):
 
     def to_json(self):
         json_chapter = {
-            'url': url_for('api.get_chapter', id=self.book_id, _external=True),
+            'url': url_for('api.get_chapter', book_id=self.book_id, _external=True),
             'chapter_name': self.chapter,
             'chapter_url': self.chapter_url,
-            'content': url_for('api.get_content', id=self.id, _external=True)
         }
 
         return json_chapter
@@ -74,7 +72,7 @@ class Article(db.Model):
 
     def to_json(self):
         json_article = {
-            'url': url_for('api.get_content', id=self.chapter_id, _external=True),
+            'url': url_for('api.get_content', chapter_id=self.chapter_id, _external=True),
             'content': self.content
         }
 
