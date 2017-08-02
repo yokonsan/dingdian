@@ -1,6 +1,6 @@
 # coding=utf-8
-import re
 import requests
+from lxml import etree
 from requests.exceptions import ConnectionError
 
 
@@ -13,7 +13,9 @@ from requests.exceptions import ConnectionError
 class DdSpider(object):
 
     def __init__(self):
-        self.headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:54.0) Gecko/20100101 Firefox/54.0'}
+        self.headers = {
+            'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:54.0) Gecko/20100101 Firefox/54.0'
+        }
 
     def parse_url(self, url):
         try:
@@ -29,47 +31,56 @@ class DdSpider(object):
 
     # 搜索结果页数据
     def get_index_result(self, search, page=0):
-        url = 'http://zhannei.baidu.com/cse/search?q={search}&p={page}&s=1682272515249779940&entry=1'.format(
-            search=search, page=page)
+        if page == 0:
+            url = 'http://zhannei.baidu.com/cse/search?s=1682272515249779940&entry=1&q={search}'.format(search=search)
+        else:
+            url = 'http://zhannei.baidu.com/cse/search?q={search}&p={page}&s=1682272515249779940'.format(
+                search=search, page=page)
         resp = self.parse_url(url)
-        resp = re.sub(r'<em>', '', resp)
-        resp = re.sub(r'</em>', '', resp)
-        p = re.compile(r'<a cpos="img".*?<img src="(.*?)".*?<a cpos="title".*?="(.*?)".*?_blank">'
-                       + r'(.*?)</a>.*?<p class="result-game-item-desc">(.*?)'
-                       + r'</p>.*?<span.*?<span>(.*?)</span>.*?title">(.*?)</span>.*?title">(.*?)</span>', re.S)
-        items = re.findall(p, resp)
-        for i in items:
+        html = etree.HTML(resp)
+        titles = html.xpath('//*[@id="results"]/div/div/div/h3/a/@title')
+        urls = html.xpath('//*[@id="results"]/div/div/div/h3/a/@href')
+        images = html.xpath('//*[@id="results"]/div/div/div/a/img/@src')
+        authors = html.xpath('//*[@id="results"]/div/div/div/div/p[1]/span[2]/text()')
+        profiles = html.xpath('//*[@id="results"]/div/div/div/p/text()')
+        styles = html.xpath('//*[@id="results"]/div/div/div/div/p[2]/span[2]/text()')
+        times = html.xpath('//*[@id="results"]/div/div/div/div/p[3]/span[2]/text()')
+        for title, url, image, author, profile, style, tim in zip(titles, urls, images, authors, profiles, styles,
+                                                                  times):
             data = {
-                'image': i[0],
-                'url': i[1],
-                'title': i[2].strip(),
-                'profile': i[3].strip().replace('\u3000', '').replace('\n', ''),
-                'author': i[4].strip(),
-                'style': i[5].strip(),
-                'time': i[6].strip()
+                'title': title.strip(),
+                'url': url,
+                'image': image,
+                'author': author.strip(),
+                'profile': profile.strip().replace('\u3000', '').replace('\n', ''),
+                'style': style.strip(),
+                'time': tim.strip()
             }
             yield data
 
     # 小说章节页数据
     def get_chapter(self, url):
         resp = self.parse_url(url)
-        p = re.compile(r'<dd> <a style=.*?href="(.*?)">(.*?)</a></dd>')
-        chapters = re.findall(p, resp)
-        for i in chapters:
+        html = etree.HTML(resp)
+        chapters = html.xpath('//*[@id="main"]/div/dl/dd/a/text()')
+        urls = html.xpath('//*[@id="main"]/div/dl/dd/a/@href')
+        for chapter_url, chapter in zip(urls, chapters):
             data = {
-                'url': str(url) + i[0],
-                'chapter': i[1]
+                'url': str(url) + chapter_url,
+                'chapter': chapter
             }
             yield data
 
     # 章节内容页数据
     def get_article(self, url):
         resp = self.parse_url(url)
-        p = re.compile(r'<div id="content">(.*?)</div>', re.S)
-        article = re.findall(p, resp)
-        # 文章中的'<br/>'标签先不去除，后面在模版中使用
-        return article[0].strip()
+        html = etree.HTML(resp)
+        content = html.xpath('//*[@id="content"]/text()')
+        return '<br>'.join(content)
+
 
 # dd = DdSpider()
-# print(dd.get_article('http://www.23us.cc/html/158/158120/8275025.html'))
+# # for i in dd.get_index_result('诛仙',page=0):
+# #     print(i)
+# print(dd.get_article('http://www.23us.cc/html/138/138189/7009918.html'))
 

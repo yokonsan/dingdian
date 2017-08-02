@@ -38,7 +38,7 @@ def result(search):
     # 查找数据库中search键相等的结果，如果有则不需要调用爬虫，直接返回
     books = Novel.query.filter_by(search_name=search, page=page).all()
     if books:
-        return render_template('result.html', search=search, page=page,books=books)
+        return render_template('result.html', search=search, page=page, books=books)
 
     spider = DdSpider()
 
@@ -54,7 +54,7 @@ def result(search):
                       search_name=search)
         db.session.add(novel)
     books = Novel.query.filter_by(search_name=search, page=page).all()
-    return render_template('result.html', search=search, page=page,books=books)
+    return render_template('result.html', search=search, page=page, books=books)
 
 @main.route('/chapter/<int:book_id>')
 def chapter(book_id):
@@ -115,8 +115,6 @@ def next(chapter_id):
         flash('已是最后一章了。')
         return redirect(url_for('main.content', chapter_id=chapter_id))
 
-
-
 # 上一章
 @main.route('/prev/<int:chapter_id>')
 def prev(chapter_id):
@@ -129,6 +127,4 @@ def prev(chapter_id):
     else:
         flash('没有上一章了哦。')
         return redirect(url_for('main.content', chapter_id=chapter_id))
-
-
 

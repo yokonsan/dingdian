@@ -13,6 +13,9 @@
     </a>
 </div>
 <h3 align="center">{{search}}的搜索结果</h3><hr>
+{% if not books %}
+<h4>啊哦，似乎没有找到你需要的结果！</h4>
+{% endif %}
 {% for i in books %}
 <ul class="list-group">
     <li class="list-group-item">
