@@ -14,6 +14,7 @@ class Novel(db.Model):
     last_update = db.Column(db.String(64), nullable=True)
     profile = db.Column(db.Text, nullable=True)
     search_name = db.Column(db.String)
+    page = db.Column(db.Integer)
 
     chapters = db.relationship('Chapter', backref='book', lazy='dynamic')
 

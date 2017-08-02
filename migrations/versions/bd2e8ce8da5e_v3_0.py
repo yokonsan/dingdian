@@ -1,8 +1,8 @@
-"""v2.0
+"""v3.0
 
-Revision ID: b3cd96ed4ee0
+Revision ID: bd2e8ce8da5e
 Revises: 
-Create Date: 2017-08-01 14:20:52.065142
+Create Date: 2017-08-02 10:31:55.750516
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = 'b3cd96ed4ee0'
+revision = 'bd2e8ce8da5e'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -28,6 +28,7 @@ def upgrade():
     sa.Column('last_update', sa.String(length=64), nullable=True),
     sa.Column('profile', sa.Text(), nullable=True),
     sa.Column('search_name', sa.String(), nullable=True),
+    sa.Column('page', sa.Integer(), nullable=True),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_index(op.f('ix_novels_book_name'), 'novels', ['book_name'], unique=False)

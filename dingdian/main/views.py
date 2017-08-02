@@ -34,13 +34,15 @@ def index():
 
 @main.route('/results/<search>')
 def result(search):
+    page = request.args.get('page', 0, type=int)
     # 查找数据库中search键相等的结果，如果有则不需要调用爬虫，直接返回
-    books = Novel.query.filter_by(search_name=search).all()
+    books = Novel.query.filter_by(search_name=search, page=page).all()
     if books:
-        return render_template('result.html', search=search, books=books)
+        return render_template('result.html', search=search, page=page,books=books)
 
     spider = DdSpider()
-    for data in spider.get_index_result(search):
+
+    for data in spider.get_index_result(search, page):
         novel = Novel(book_name=data['title'],
                       book_url=data['url'],
                       book_img=data['image'],
@@ -48,10 +50,11 @@ def result(search):
                       style=data['style'],
                       profile=data['profile'],
                       last_update=data['time'],
+                      page=page,
                       search_name=search)
         db.session.add(novel)
-    books = Novel.query.filter_by(search_name=search).all()
-    return render_template('result.html', search=search, books=books)
+    books = Novel.query.filter_by(search_name=search, page=page).all()
+    return render_template('result.html', search=search, page=page,books=books)
 
 @main.route('/chapter/<int:book_id>')
 def chapter(book_id):

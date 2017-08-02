@@ -12,9 +12,11 @@
 
 爬虫api调用：
 
-- 搜索结果页：`DdSpider().get_index_result(search)`
+- 搜索结果页：`DdSpider().get_index_result(search, page=0)`
 - 小说章节页：`DdSpider().get_chapter(book_url)`
 - 章节内容：`DdSpider().get_article(chapter_url)`
+
+由于正常搜索，需要的最符合的结果都会显示在第一页，所以爬虫设成了默认只抓第一页。不过jinja2模版中加了下一页和上一页的按钮，爬虫会根据具体第几页抓取，不会一次性抓取太多影响运行速度。
 
 爬虫封装在DdSpider类中，如果网站再次更新，只要改动DdSpider就可以了。
 

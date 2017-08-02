@@ -28,9 +28,9 @@ class DdSpider(object):
         return None
 
     # 搜索结果页数据
-    def get_index_result(self, search):
+    def get_index_result(self, search, page=0):
         url = 'http://zhannei.baidu.com/cse/search?q={search}&p={page}&s=1682272515249779940&entry=1'.format(
-            search=search, page=0)
+            search=search, page=page)
         resp = self.parse_url(url)
         resp = re.sub(r'<em>', '', resp)
         resp = re.sub(r'</em>', '', resp)
