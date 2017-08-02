@@ -13,7 +13,7 @@ manager.add_command('db', MigrateCommand)
 
 @manager.command
 def deploy():
-    from flask_migrate import upgrade
+    # from flask_migrate import upgrade
     # 情况数据库的操作只在运行过后才可以取消注释使用
     # from dingdian.models import Search, Novel, Chapter, Article
     #
@@ -32,9 +32,8 @@ def deploy():
     #     db.session.delete(a)
 
     # db.session.commit()
-
-    # 更新数据库
-    upgrade()
+    from dingdian.models import Alembic
+    Alembic.clear_A()
 
 if __name__ == '__main__':
     manager.run()
