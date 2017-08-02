@@ -8,7 +8,9 @@
 
 ### 爬虫实现
 
-利用正则表达式加`requests`库，抓取顶点网的小说数据。
+~~~利用正则表达式加`requests`库，抓取顶点网的小说数据。~~~
+
+由于`re`匹配数据速度太慢了，改用`xpath`和`requests`库，抓取顶点网的小说数据。
 
 爬虫api调用：
 
@@ -37,6 +39,19 @@ $ python manage.py runserver --host 0.0.0.0
 ### 部署
 
 利用Gunicorn部署在heroku，具体参考这里[here](https://github.com/Blackyukun/Simpleblog/blob/master/README.md)
+
+不过自己记得在仓库push你的migrations/，还有就是我的manage的deploy被我改了（push到远程服务器出现更新数据库错误），所以大家需要将他改为更新数据库的代码：
+
+```Python
+@manager.command
+def deploy():
+    from flask_migrate import upgrade
+    from app.models import Role
+    # 更新
+    upgrade()
+```
+
+然后部署步骤不变。
 
 访问：[Mynovels](http://dingdian.herokuapp.com)
 
