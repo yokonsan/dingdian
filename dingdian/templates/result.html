@@ -30,6 +30,11 @@
                     <p><b>作者：</b>{{i.author}}</p>
                     <p><b>类型：</b>{{i.style}}</p>
                     <p><b>更新时间：</b>{{i.last_update}}</p>
+                    {% if i.book_shelf == 1 %}
+                    <p><button class="btn btn-default removeShelf" data-id="{{i.id}}">移出书架</button></p>
+                    {% else %}
+                    <p><button class="btn btn-default addShelf" data-id="{{i.id}}">加入书架</button></p>
+                    {% endif %}
                 </td>
             </tr>
         </table>
@@ -39,13 +44,37 @@
 <ul class="pager">
     {% if page-1 != -1 %}
 	<li class="previous"><a href="{{url_for('main.result',search=search,page=page-1)}}">&larr; Older</a></li>
-    {% else %}
-    <li class="previous disable">&larr; Older</li>
     {% endif %}
     {% if page+1 !=10 %}
 	<li class="next"><a href="{{url_for('main.result',search=search,page=page+1)}}">Newer &rarr;</a></li>
-    {% else %}
-    <li class="next disable">Newer &rarr;</li>
     {% endif %}
 </ul>
+{% endblock %}
+
+{% block script %}
+{{ super() }}
+<script>
+$('.addShelf').click(function(){
+    var book_id = $(this).data('id');
+    var _this =  $(this);
+    $.get('/shelf/'+book_id+'/1',function(data){
+        if (data.status == 1){
+            _this.text('移出书架');
+            _this.removeClass('addShelf');
+            _this.addClass('removeShelf');
+        }
+    });
+});
+$('.removeShelf').click(function(){
+    var book_id = $(this).data('id');
+    var _this =  $(this);
+    $.get('/shelf/'+book_id+'/0',function(data){
+        if (data.status == 1){
+            _this.text('加入书架');
+            _this.removeClass('removeShelf');
+            _this.addClass('addShelf');
+        }
+    });
+});
+</script>
 {% endblock %}
