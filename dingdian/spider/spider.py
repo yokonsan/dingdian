@@ -62,8 +62,8 @@ class DdSpider(object):
     def get_chapter(self, url):
         resp = self.parse_url(url)
         html = etree.HTML(resp)
-        chapters = html.xpath('//*[@id="main"]/div/dl/dd/a/text()')
-        urls = html.xpath('//*[@id="main"]/div/dl/dd/a/@href')
+        chapters = html.xpath('//*[@id="main"]/div/dl/dd[position()>12]/a/text()')
+        urls = html.xpath('//*[@id="main"]/div/dl/dd[position()>12]/a/@href')
         for chapter_url, chapter in zip(urls, chapters):
             data = {
                 'url': str(url) + chapter_url,
