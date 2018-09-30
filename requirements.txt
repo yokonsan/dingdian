@@ -8,7 +8,7 @@ Flask-SQLAlchemy==2.2
 Flask-SSLify==0.1.5
 Flask-WTF==0.14.2
 Jinja2==2.8
-lxml==3.6.0
+lxml==4.2.5
 MarkupSafe==0.23
 requests==2.14.2
 SQLAlchemy==1.0.13

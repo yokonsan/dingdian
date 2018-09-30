@@ -8,6 +8,7 @@ class Novel(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     book_name = db.Column(db.String(64), index=True)
     book_url = db.Column(db.String)
+    book_shelf = db.Column(db.Integer)
     book_img = db.Column(db.String)
     author = db.Column(db.String(64))
     style = db.Column(db.String(64), nullable=True)
@@ -22,6 +23,7 @@ class Novel(db.Model):
         json_novel = {
             'url': url_for('api.get_result', search=self.search_name,_external=True),
             'book_name': self.book_name,
+            'book_shelf': self.book_shelf,
             'book_url': self.book_url,
             'book_img': self.book_img,
             'author': self.author,

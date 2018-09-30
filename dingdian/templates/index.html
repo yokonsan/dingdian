@@ -15,9 +15,35 @@ MyNovels
 {{form.submit(value="搜索",class="btn btn-default")}}
 </form>
 <hr>
-<div class="github-card" data-github="Blackyukun/dingdian" data-width="400" data-height="" data-theme="default"></div>
+{% for i in books %}
+<ul class="list-group">
+    <li class="list-group-item">
+        <table>
+            <tr>
+                <td>
+                    <img class="img" src="{{i.book_img}}">
+                </td>
+                <td>
+                    <a href="{{url_for('main.chapter',book_id=i.id)}}">{{i.book_name}}</a>
+                    <p><b>简介：</b>{{i.profile | safe}}</p>
+                    <p><b>作者：</b>{{i.author}}</p>
+                    <p><b>类型：</b>{{i.style}}</p>
+                    <p><b>更新时间：</b>{{i.last_update}}</p>
+                </td>
+            </tr>
+        </table>
+    </li>
+</ul>
+{% endfor %}
+<ul class="pager">
+    {% if page-1 != -1 %}
+	<li class="previous"><a href="{{url_for('main.result',search=search,page=page-1)}}">&larr; Older</a></li>
+    {% endif %}
+    {% if page+1 !=10 %}
+	<li class="next"><a href="{{url_for('main.result',search=search,page=page+1)}}">Newer &rarr;</a></li>
+    {% endif %}
+</ul>
 {% block script %}
 {{ super() }}
-<script src="https://cdn.jsdelivr.net/github-cards/latest/widget.js"></script>
 {% endblock %}
 {% endblock %}
